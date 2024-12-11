@@ -100,6 +100,28 @@ public class BasicExperienceTank implements IExperienceHandler, INBTSerializable
   }
 
   @Override
+  public long extractExperienceRecipe(long maxExtract, boolean simulate) {
+    long extractable = this.experience - maxExtract < 0 ? this.experience : maxExtract;
+    if (!simulate) {
+      this.experience = clamp(this.experience - extractable, 0, getExperienceCapacity());
+      if (listener != null) listener.onContentsChanged();
+    }
+    return extractable;
+  }
+
+  @Override
+  public long receiveExperienceRecipe(long maxReceive, boolean simulate) {
+    long insertable = this.experience + maxReceive > this.getExperienceCapacity() ?
+        this.getExperienceCapacity() - this.experience :
+        maxReceive;
+    if (!simulate) {
+      this.experience = clamp(this.experience + insertable, 0, this.getExperienceCapacity());
+      if (listener != null) listener.onContentsChanged();
+    }
+    return insertable;
+  }
+
+  @Override
   public Tag serializeNBT(HolderLookup.Provider provider) {
     return LongTag.valueOf(getExperience());
   }

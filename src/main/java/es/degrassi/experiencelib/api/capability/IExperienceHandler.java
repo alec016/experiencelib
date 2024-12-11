@@ -26,4 +26,15 @@ public interface IExperienceHandler {
   long receiveExperience(long experience, boolean simulate);
 
   long extractExperience(long experience, boolean simulate);
+
+  long extractExperienceRecipe(long maxExtract, boolean simulate);
+  long receiveExperienceRecipe(long maxReceive, boolean simulate);
+
+  default long clamp(long num, long min, long max) {
+    if (num < min) {
+      return min;
+    } else {
+      return Math.min(num, max);
+    }
+  }
 }

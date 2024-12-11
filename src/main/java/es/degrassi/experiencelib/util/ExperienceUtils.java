@@ -70,7 +70,7 @@ public class ExperienceUtils {
     if (give) {
       awardXP = Ints.saturatedCast(handler.getExperience());
     } else {
-      awardXP = Ints.saturatedCast(-Math.min(ExperienceUtils.getPlayerTotalXp(player),
+      awardXP = -Ints.saturatedCast(Math.min(ExperienceUtils.getPlayerTotalXp(player),
           handler.getExperienceCapacity() - handler.getExperience()));
     }
     awardXP(handler, awardXP, player);
