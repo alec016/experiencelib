@@ -1,8 +1,8 @@
 package es.degrassi.experiencelib;
 
-import es.degrassi.experiencelib.impl.capability.BasicExperienceTank;
 import es.degrassi.experiencelib.api.capability.ExperienceLibCapabilities;
 import es.degrassi.experiencelib.api.capability.IExperienceHandler;
+import es.degrassi.experiencelib.impl.capability.BasicExperienceTank;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BottleItem;
 import net.minecraft.world.item.ExperienceBottleItem;

@@ -1,13 +1,19 @@
 package es.degrassi.experiencelib.util;
 
 import com.google.common.primitives.Ints;
+import es.degrassi.experiencelib.ExperienceLib;
 import es.degrassi.experiencelib.api.capability.IExperienceHandler;
+import net.minecraft.client.resources.model.Material;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.InventoryMenu;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 public class ExperienceUtils {
+  public static final Material EXPERIENCE = new Material(InventoryMenu.BLOCK_ATLAS, ExperienceLib.rl("block/experience"));
+  public static final ResourceLocation EXPERIENCE_GUI = ExperienceLib.rl("textures/gui/experience.png");
   private static final NumberFormat NUMBER_FORMAT = new DecimalFormat("#,###");
 
   public static String format(int number) {
