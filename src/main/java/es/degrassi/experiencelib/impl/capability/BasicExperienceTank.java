@@ -3,8 +3,7 @@ package es.degrassi.experiencelib.impl.capability;
 import es.degrassi.experiencelib.api.capability.IContentsListener;
 import es.degrassi.experiencelib.api.capability.IExperienceHandler;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.LongTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 import org.jetbrains.annotations.Nullable;
@@ -12,9 +11,9 @@ import org.jetbrains.annotations.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public class BasicExperienceTank implements IExperienceHandler, INBTSerializable<Tag> {
+public class BasicExperienceTank implements IExperienceHandler, INBTSerializable<CompoundTag> {
   private long experience;
-  private final long capacity;
+  private long capacity;
   private final @Nullable IContentsListener listener;
 
   public BasicExperienceTank(long capacity, @Nullable IContentsListener listener) {
@@ -66,6 +65,12 @@ public class BasicExperienceTank implements IExperienceHandler, INBTSerializable
   @Override
   public void setExperience(long experience) {
     this.experience = experience;
+    if (listener != null) listener.onContentsChanged();
+  }
+
+  @Override
+  public void setCapacity(long capacity) {
+    this.capacity = capacity;
     if (listener != null) listener.onContentsChanged();
   }
 
@@ -122,16 +127,16 @@ public class BasicExperienceTank implements IExperienceHandler, INBTSerializable
   }
 
   @Override
-  public Tag serializeNBT(HolderLookup.Provider provider) {
-    return LongTag.valueOf(getExperience());
+  public CompoundTag serializeNBT(HolderLookup.Provider provider) {
+    CompoundTag tag = new CompoundTag();
+    tag.putLong("experience", getExperience());
+    tag.putLong("capacity", getExperienceCapacity());
+    return tag;
   }
 
   @Override
-  public void deserializeNBT(HolderLookup.Provider provider, Tag nbt) {
-    if (nbt instanceof LongTag longTag) {
-      this.experience = longTag.getAsLong();
-    } else {
-      throw new IllegalArgumentException("Can not deserialize to an instance that isn't the default implementation");
-    }
+  public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
+    this.experience = nbt.getLong("experience");
+    this.capacity = nbt.getLong("capacity");
   }
 }

@@ -22,6 +22,7 @@ public interface IExperienceHandler {
   long getExperienceCapacity();
 
   void setExperience(long experience);
+  void setCapacity(long experience);
 
   long receiveExperience(long experience, boolean simulate);
 
