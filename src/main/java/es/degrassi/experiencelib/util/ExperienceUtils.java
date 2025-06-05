@@ -1,19 +1,13 @@
 package es.degrassi.experiencelib.util;
 
 import com.google.common.primitives.Ints;
-import es.degrassi.experiencelib.ExperienceLib;
 import es.degrassi.experiencelib.api.capability.IExperienceHandler;
-import net.minecraft.client.resources.model.Material;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.InventoryMenu;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 public class ExperienceUtils {
-  public static final Material EXPERIENCE = new Material(InventoryMenu.BLOCK_ATLAS, ExperienceLib.rl("block/experience"));
-  public static final ResourceLocation EXPERIENCE_GUI = ExperienceLib.rl("textures/gui/experience.png");
   private static final NumberFormat NUMBER_FORMAT = new DecimalFormat("#,###");
 
   public static String format(int number) {
@@ -84,9 +78,15 @@ public class ExperienceUtils {
 
   public static void awardXP(IExperienceHandler handler, int xp, Player player) {
     if (xp > 0) {
-      handler.extractExperience(xp, false);
+      for (int i = 0; i < handler.getTanks(); i++) {
+        if (xp <= 0) break;
+        xp -= (int) handler.extractExperience(i, xp, false);
+      }
     } else {
-      handler.receiveExperience(Math.abs(xp), false);
+      for (int i = 0; i < handler.getTanks(); i++) {
+        if (xp >= 0) break;
+        xp += (int) handler.receiveExperience(i, Math.abs(xp), false);
+      }
     }
     player.giveExperiencePoints(xp);
   }

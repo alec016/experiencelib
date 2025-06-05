@@ -1,17 +1,16 @@
 package es.degrassi.experiencelib.impl.capability;
 
 import es.degrassi.experiencelib.api.capability.IContentsListener;
-import es.degrassi.experiencelib.api.capability.IExperienceHandler;
+import es.degrassi.experiencelib.api.capability.IExperienceTank;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
-import net.neoforged.neoforge.common.util.INBTSerializable;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public class BasicExperienceTank implements IExperienceHandler, INBTSerializable<CompoundTag> {
+public class BasicExperienceTank implements IExperienceTank {
   private long experience;
   private long capacity;
   private final @Nullable IContentsListener listener;

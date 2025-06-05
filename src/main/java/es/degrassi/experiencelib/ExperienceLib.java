@@ -2,7 +2,7 @@ package es.degrassi.experiencelib;
 
 import es.degrassi.experiencelib.api.capability.ExperienceLibCapabilities;
 import es.degrassi.experiencelib.api.capability.IExperienceHandler;
-import es.degrassi.experiencelib.impl.capability.BasicExperienceTank;
+import es.degrassi.experiencelib.impl.capability.BasicExperienceHandler;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BottleItem;
 import net.minecraft.world.item.ExperienceBottleItem;
@@ -26,11 +26,11 @@ public class ExperienceLib {
   private void addCapabilities(final RegisterCapabilitiesEvent event) {
     event.registerItem(ExperienceLibCapabilities.EXPERIENCE.item(), (x, y) -> {
       if (x.getItem() instanceof ExperienceBottleItem) {
-        IExperienceHandler handler = new BasicExperienceTank(7, null);
-        handler.setExperience(7);
+        IExperienceHandler handler = new BasicExperienceHandler(1, 7, null);
+        handler.setExperience(0, 7);
         return handler;
       } else if (x.getItem() instanceof BottleItem) {
-        return new BasicExperienceTank(7, null);
+        return new BasicExperienceHandler(1, 7, null);
       }
       return null;
     }, Items.EXPERIENCE_BOTTLE, Items.GLASS_BOTTLE);

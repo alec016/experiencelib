@@ -1,41 +1,40 @@
 package es.degrassi.experiencelib.api.capability;
 
-public interface IExperienceHandler {
-  boolean canAcceptExperience(long experience);
+import net.minecraft.nbt.CompoundTag;
+import net.neoforged.neoforge.common.util.INBTSerializable;
 
-  boolean canProvideExperience(long experience);
+public interface IExperienceHandler extends INBTSerializable<CompoundTag> {
+  int getTanks();
 
-  long getMaxExtract();
+  boolean canAcceptExperience(int tank, long amount);
+  boolean canProvideExperience(int tank, long amount);
 
-  long getMaxReceive();
+  long getMaxExtract(int tank);
+  long getMaxReceive(int tank);
 
-  default boolean canExtract() {
-    return this.canProvideExperience(1);
+  default boolean canExtract(int tank) {
+    return this.canProvideExperience(tank, 1);
   }
 
-  default boolean canReceive() {
-    return this.canAcceptExperience(1);
+  default boolean canReceive(int tank) {
+    return this.canAcceptExperience(tank, 1);
   }
+
+  void setExperience(int tank, long amount);
+  void setCapacity(int tank, long amount);
+
+  long receiveExperience(int tank, long amount, boolean simulate);
+  long extractExperience(int tank, long amount, boolean simulate);
+
+  long receiveExperienceRecipe(int tank, long amount, boolean simulate);
+  long extractExperienceRecipe(int tank, long amount, boolean simulate);
 
   long getExperience();
-
   long getExperienceCapacity();
 
-  void setExperience(long experience);
-  void setCapacity(long experience);
-
-  long receiveExperience(long experience, boolean simulate);
-
-  long extractExperience(long experience, boolean simulate);
-
-  long extractExperienceRecipe(long maxExtract, boolean simulate);
-  long receiveExperienceRecipe(long maxReceive, boolean simulate);
-
   default long clamp(long num, long min, long max) {
-    if (num < min) {
+    if (num < min)
       return min;
-    } else {
-      return Math.min(num, max);
-    }
+    return Math.min(num, max);
   }
 }
