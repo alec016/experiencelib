@@ -18,6 +18,7 @@ import org.apache.logging.log4j.Logger;
 public class ExperienceLib {
   public static final String MODID = "experiencelib";
   public static final Logger LOGGER = LogManager.getLogger("ExperienceLib");
+  public static final ExperienceLibHooks hooks = new ExperienceLibHooks();
 
   public ExperienceLib(final ModContainer CONTAINER, final IEventBus bus) {
     bus.addListener(this::addCapabilities);
