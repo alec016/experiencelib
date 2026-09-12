@@ -1,0 +1,80 @@
+package es.degrassi.experiencelib.util;
+
+import net.minecraft.IdentifierException;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.RandomSource;
+
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+
+public class Utils {
+  private Utils() {}
+  public static final RandomSource RAND = RandomSource.create(42L);
+  private static final NumberFormat NUMBER_FORMAT = new DecimalFormat("#,###");
+  public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.##");
+
+  public static boolean isResourceNameValid(String resourceLocation) {
+    try {
+      Identifier.tryParse(resourceLocation);
+      return true;
+    } catch (IdentifierException e) {
+      return false;
+    }
+  }
+
+  public static String format(int number) {
+    return NUMBER_FORMAT.format(number);
+  }
+  public static String formatWithPercentage(int number) {
+    return format(number) + "%";
+  }
+
+  public static String decimalFormat(int number) {
+    return DECIMAL_FORMAT.format(number).replace(",", ".");
+  }
+  public static String decimalFormatWithPercentage(int number) {
+    return decimalFormat(number) + "%";
+  }
+
+  public static String format(long number) {
+    return NUMBER_FORMAT.format(number);
+  }
+  public static String formatWithPercentage(long number) {
+    return format(number) + "%";
+  }
+
+  public static String decimalFormat(long number) {
+    return DECIMAL_FORMAT.format(number).replace(",", ".");
+  }
+  public static String decimalFormatWithPercentage(long number) {
+    return decimalFormat(number) + "%";
+  }
+
+  public static String format(double number) {
+    return NUMBER_FORMAT.format(number);
+  }
+  public static String formatWithPercentage(double number) {
+    return format(number) + "%";
+  }
+
+  public static String decimalFormat(double number) {
+    return DECIMAL_FORMAT.format(number).replace(",", ".");
+  }
+  public static String decimalFormatWithPercentage(double number) {
+    return decimalFormat(number) + "%";
+  }
+
+  public static long clamp(long value, long min, long max) {
+    return value < min ? min : Math.min(value, max);
+  }
+
+  public static boolean shouldRunPeriodicCheck(boolean immediate, long gameTime, long lastGameTime, long offset, long period) {
+    if (lastGameTime == gameTime)
+      return false;
+    if (immediate)
+      return true;
+    long roundGameTime = gameTime % period;
+    long roundOffset = offset % period;
+    return (roundGameTime + roundOffset) % period == 0;
+  }
+}
