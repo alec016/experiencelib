@@ -17,6 +17,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.ByteBuffer;
@@ -267,6 +269,10 @@ public interface NamedCodec<A> {
         return NamedCodec.this.name();
       }
     };
+  }
+
+  default StreamCodec<RegistryFriendlyByteBuf, A> streamCodec() {
+    return StreamCodec.of(this::toNetwork, this::fromNetwork);
   }
 
   default NamedCodec<List<A>> listOf() {

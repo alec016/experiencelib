@@ -1,5 +1,7 @@
 package es.degrassi.experiencelib.util;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import net.minecraft.IdentifierException;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
@@ -7,8 +9,8 @@ import net.minecraft.util.RandomSource;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
-public class Utils {
-  private Utils() {}
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class Utils {
   public static final RandomSource RAND = RandomSource.create(42L);
   private static final NumberFormat NUMBER_FORMAT = new DecimalFormat("#,###");
   public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.##");

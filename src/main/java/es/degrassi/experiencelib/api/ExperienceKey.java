@@ -1,4 +1,4 @@
-package es.degrassi.experiencelib.api.xei;
+package es.degrassi.experiencelib.api;
 
 import es.degrassi.experiencelib.ExperienceLib;
 import net.minecraft.resources.Identifier;

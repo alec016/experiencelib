@@ -1,4 +1,4 @@
-package es.degrassi.experiencelib.api.xei;
+package es.degrassi.experiencelib.api;
 
 import es.degrassi.experiencelib.api.codec.NamedCodec;
 import es.degrassi.experiencelib.util.Utils;
@@ -20,6 +20,10 @@ public class ExperienceStack {
       NamedCodec.DOUBLE.fieldOf("amount").forGetter(ExperienceStack::getAmount)
   ).apply(instance, ExperienceStack::new), "ExperienceStack");
 
+  public static NamedCodec<ExperienceStack> fixedAmountCodec(long amount) {
+    return NamedCodec.unit(new ExperienceStack(amount));
+  }
+
   public ExperienceStack(double amount) {
     this.amount = amount;
   }
@@ -33,7 +37,7 @@ public class ExperienceStack {
   }
 
   public boolean isEmpty() {
-    return this == EMPTY || amount <= 0;
+    return equals(EMPTY) || amount <= 0;
   }
 
   public Component getName() {
@@ -69,5 +73,13 @@ public class ExperienceStack {
 
   public ExperienceStack copyWithAmount(double newAmount) {
     return new ExperienceStack(newAmount);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (!(obj instanceof ExperienceStack that)) return false;
+    return that.amount == this.amount;
   }
 }

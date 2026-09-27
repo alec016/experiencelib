@@ -31,7 +31,7 @@ public final class ExperienceLibHooks {
   public final IntegrationInfo emi;
   public final IntegrationInfo jei;
 
-  public ExperienceLibHooks() {
+  ExperienceLibHooks() {
     ModList modList = ModList.get();
     Predicate<String> loadedCheck = modList == null ? modid -> false : modList::isLoaded;
     jei = new IntegrationInfo("jei", loadedCheck);

@@ -1,5 +1,7 @@
 package es.degrassi.experiencelib.util;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -17,7 +19,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
 
-public class TextComponentUtil {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class TextComponentUtil {
   public static MutableComponent build(Object... components) {
     MutableComponent result = null;
     Style cachedStyle = Style.EMPTY;

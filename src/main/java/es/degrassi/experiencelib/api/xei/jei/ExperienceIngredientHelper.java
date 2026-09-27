@@ -1,6 +1,6 @@
 package es.degrassi.experiencelib.api.xei.jei;
 
-import es.degrassi.experiencelib.api.xei.ExperienceStack;
+import es.degrassi.experiencelib.api.ExperienceStack;
 import mezz.jei.api.ingredients.IIngredientHelper;
 import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.ingredients.subtypes.UidContext;

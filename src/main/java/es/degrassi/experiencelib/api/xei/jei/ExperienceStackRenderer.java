@@ -1,6 +1,6 @@
 package es.degrassi.experiencelib.api.xei.jei;
 
-import es.degrassi.experiencelib.api.xei.ExperienceStack;
+import es.degrassi.experiencelib.api.ExperienceStack;
 import es.degrassi.experiencelib.client.Blitter;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import net.minecraft.client.gui.GuiGraphicsExtractor;

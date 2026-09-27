@@ -1,7 +1,7 @@
 package es.degrassi.experiencelib.api.xei.jei;
 
 import es.degrassi.experiencelib.ExperienceLib;
-import es.degrassi.experiencelib.api.xei.ExperienceStack;
+import es.degrassi.experiencelib.api.ExperienceStack;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.registration.IModIngredientRegistration;
