@@ -13,6 +13,7 @@ body:
       label: Version
       description: What version of ExperienceLib are you using?
       options:
+        - 2.0.1
         - 2.0.0
       default: 0
     validations:
