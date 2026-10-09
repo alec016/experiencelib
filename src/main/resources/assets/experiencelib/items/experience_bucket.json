@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "experiencelib:item/experience_bucket"
+  }
+}

@@ -10,7 +10,7 @@ public class SimpleExperienceHandler implements IExperienceHandler {
   protected long amount = 0, capacity;
   protected long maxInsert, maxExtract;
 
-  private final ExperienceJournal journal = new ExperienceJournal();
+  protected final ExperienceJournal journal = new ExperienceJournal();
 
   public SimpleExperienceHandler(long capacity) {
     this(capacity, capacity, capacity);
@@ -32,6 +32,14 @@ public class SimpleExperienceHandler implements IExperienceHandler {
     return maxInsert;
   }
 
+  public void setMaxExtract(int tank, long maxExtract) {
+    this.maxExtract = maxExtract;
+  }
+
+  public void setMaxInsert(int tank, long maxInsert) {
+    this.maxInsert = maxInsert;
+  }
+
   @Override
   public void setExperience(int tank, long amount) {
     this.amount = Math.min(amount, capacity);
@@ -46,7 +54,7 @@ public class SimpleExperienceHandler implements IExperienceHandler {
   @Override
   public long insert(int tank, long amount, TransactionContext context) {
     TransferPreconditions.checkNonNegative(amount);
-    var toInsert = Math.min(amount, Math.min(this.capacity - amount, this.maxInsert));
+    var toInsert = Math.min(amount, Math.min(this.capacity - this.amount, this.maxInsert));
     if (toInsert > 0) {
       this.journal.updateSnapshots(context);
       this.amount += toInsert;
@@ -106,7 +114,7 @@ public class SimpleExperienceHandler implements IExperienceHandler {
     return this.capacity;
   }
 
-  private class ExperienceJournal extends SnapshotJournal<Long> {
+  protected class ExperienceJournal extends SnapshotJournal<Long> {
 
     @Override
     protected Long createSnapshot() {

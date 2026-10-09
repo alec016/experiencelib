@@ -1,0 +1,6 @@
+{
+  "block.experiencelib.experience": "Fluid Experience",
+  "experiencelib.resource.experience": "Experience",
+  "experiencelib.resource.tooltip": "%s XP",
+  "item.experiencelib.experience_bucket": "Experience Bucket"
+}

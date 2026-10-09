@@ -2,7 +2,7 @@ package es.degrassi.experiencelib.util;
 
 import com.google.common.primitives.Ints;
 import es.degrassi.experiencelib.api.ExperienceResource;
-import es.degrassi.experiencelib.transfer.ExperienceStacksResourceHandler;
+import es.degrassi.experiencelib.api.capability.IExperienceHandler;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.minecraft.world.entity.player.Player;
@@ -60,27 +60,27 @@ public final class ExperienceUtils {
     return getXpFromLevel(player.experienceLevel) + (long) Math.floor(player.experienceProgress * getXpNeededForNextLevel(player.experienceLevel));
   }
 
-  public static void addLevelToPlayer(ExperienceStacksResourceHandler handler, int levelDiff, Player player, TransactionContext context) {
+  public static void addLevelToPlayer(IExperienceHandler handler, int levelDiff, Player player, TransactionContext context) {
     int requestedLevel = player.experienceLevel + levelDiff;
     requestedLevel = Math.max(requestedLevel, 0);
-    long playerXP = ExperienceUtils.getPlayerTotalXp(player);
-    long requestedXP = ExperienceUtils.getXpFromLevel(requestedLevel) - playerXP;
+    long playerXP = getPlayerTotalXp(player);
+    long requestedXP = getXpFromLevel(requestedLevel) - playerXP;
     long awardXP = levelDiff > 0 ? Math.min(handler.getAmountAsLong(0), requestedXP) : -Math.min(Math.abs(requestedXP),
         handler.getCapacityAsLong(0, ExperienceResource.EMPTY) - handler.getAmountAsLong(0));
     awardXP(handler, Ints.saturatedCast(awardXP), player, context);
   }
 
-  public static void addAllLevelToPlayer(ExperienceStacksResourceHandler handler, boolean give, Player player, TransactionContext context) {
+  public static void addAllLevelToPlayer(IExperienceHandler handler, boolean give, Player player, TransactionContext context) {
     int awardXP;
     if (give) {
       awardXP = handler.getAmountAsInt(0);
     } else {
-      awardXP = -Ints.saturatedCast(Math.min(ExperienceUtils.getPlayerTotalXp(player), handler.getCapacity(0, ExperienceResource.EMPTY) - handler.getAmountAsLong(0)));
+      awardXP = -Ints.saturatedCast(Math.min(getPlayerTotalXp(player), handler.getCapacityAsLong(0, ExperienceResource.EMPTY) - handler.getAmountAsLong(0)));
     }
     awardXP(handler, awardXP, player, context);
   }
 
-  public static void awardXP(ExperienceStacksResourceHandler handler, int xpOrigin, Player player, TransactionContext context) {
+  public static void awardXP(IExperienceHandler handler, int xpOrigin, Player player, TransactionContext context) {
     int xp = xpOrigin;
     if (xpOrigin > 0) {
       for (int i = 0; i < handler.size(); i++) {

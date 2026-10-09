@@ -130,6 +130,9 @@ repositories {
     url = "https://maven.terraformersmc.com/"
   }
   maven {
+    url "https://www.cursemaven.com"
+  }
+  maven {
     name "latvian" // KubeJS
     url "https://maven.latvian.dev/releases"
     content {
@@ -157,6 +160,8 @@ dependencies {
   // JEI
   compileOnly("mezz.jei:jei-${mc_base_version}-neoforge-api:${jei_version}")
   compileOnly localRuntime("mezz.jei:jei-${mc_base_version}-neoforge:${jei_version}")
+
+  implementation "curse.maven:jade-324717:8857417"
 
   switch(use_xei) {
     case 'emi':

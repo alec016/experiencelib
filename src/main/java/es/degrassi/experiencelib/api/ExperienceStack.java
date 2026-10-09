@@ -1,6 +1,7 @@
 package es.degrassi.experiencelib.api;
 
 import es.degrassi.experiencelib.api.codec.NamedCodec;
+import es.degrassi.experiencelib.common.definition.ExperienceLibText;
 import es.degrassi.experiencelib.util.Utils;
 import lombok.Getter;
 import net.minecraft.network.chat.Component;
@@ -41,8 +42,7 @@ public class ExperienceStack {
   }
 
   public Component getName() {
-    // TODO: Add translation for this
-    return Component.literal("Experience");
+    return ExperienceLibText.experience.text();
   }
 
   /**
@@ -63,7 +63,7 @@ public class ExperienceStack {
   public List<Component> getTooltips() {
     var tooltips = getTooltip();
     if (!isEmpty())
-      tooltips.add(Component.translatable("%s XP", Utils.format(amount)));
+      tooltips.add(ExperienceLibText.tooltip.text(Utils.format(amount)));
     return tooltips;
   }
 
