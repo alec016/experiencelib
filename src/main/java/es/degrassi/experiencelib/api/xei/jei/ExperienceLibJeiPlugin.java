@@ -14,13 +14,13 @@ public class ExperienceLibJeiPlugin implements IModPlugin {
   public static final Identifier PLUGIN_ID = ExperienceLib.rl("jei_plugin");
 
   @Override
-  public void registerIngredients(IModIngredientRegistration registration) {
-    registration.register(IngredientTypes.EXPERIENCE, List.of(new ExperienceStack(1)),
-        new ExperienceIngredientHelper(), new ExperienceStackRenderer(), ExperienceStack.CODEC.codec());
+  public Identifier getPluginUid() {
+    return PLUGIN_ID;
   }
 
   @Override
-  public Identifier getPluginUid() {
-    return PLUGIN_ID;
+  public void registerIngredients(IModIngredientRegistration registration) {
+    registration.register(IngredientTypes.EXPERIENCE, List.of(new ExperienceStack(1)),
+        new ExperienceIngredientHelper(), new ExperienceStackRenderer(), ExperienceStack.CODEC.codec());
   }
 }

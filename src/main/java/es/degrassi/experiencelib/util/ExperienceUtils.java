@@ -65,8 +65,9 @@ public final class ExperienceUtils {
     requestedLevel = Math.max(requestedLevel, 0);
     long playerXP = getPlayerTotalXp(player);
     long requestedXP = getXpFromLevel(requestedLevel) - playerXP;
-    long awardXP = levelDiff > 0 ? Math.min(handler.getAmountAsLong(0), requestedXP) : -Math.min(Math.abs(requestedXP),
-        handler.getCapacityAsLong(0, ExperienceResource.EMPTY) - handler.getAmountAsLong(0));
+    long awardXP = levelDiff > 0
+        ? Math.min(handler.getAmountAsLong(0), requestedXP)
+        : -Math.min(Math.abs(requestedXP), handler.getCapacityAsLong(0, ExperienceResource.EMPTY) - handler.getAmountAsLong(0));
     awardXP(handler, Ints.saturatedCast(awardXP), player, context);
   }
 

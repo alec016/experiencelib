@@ -26,8 +26,7 @@ public class ExperienceLibCapabilities {
     public CapSet(Identifier name, Class<T> handlerClass) {
       this(
           BlockCapability.createSided(name, handlerClass),
-          ItemCapability.create(name, handlerClass,
-          ItemAccess.class),
+          ItemCapability.create(name, handlerClass, ItemAccess.class),
           EntityCapability.createVoid(name, handlerClass),
           EntityCapability.createSided(name.withSuffix("_automation"), handlerClass)
       );
