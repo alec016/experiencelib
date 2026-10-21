@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import net.minecraft.IdentifierException;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.Nullable;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -78,5 +80,11 @@ public final class Utils {
     long roundGameTime = gameTime % period;
     long roundOffset = offset % period;
     return (roundGameTime + roundOffset) % period == 0;
+  }
+
+  @SuppressWarnings("unchecked")
+  @Contract("null -> null; !null -> !null")
+  public static <T> @Nullable T cast(@Nullable Object o) {
+    return (T) o;
   }
 }

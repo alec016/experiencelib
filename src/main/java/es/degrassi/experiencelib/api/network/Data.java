@@ -1,30 +1,10 @@
 package es.degrassi.experiencelib.api.network;
 
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 
-public abstract class Data<T> implements IData<T> {
-
-  private final DataType<? extends Data<T>, T> type;
-  private final short id;
-  private final T value;
-
-  protected Data(DataType<? extends Data<T>, T> type, short id, T value) {
-    this.type = type;
-    this.id = id;
-    this.value = value;
-  }
-
-  @Override
-  public short getID() {
-    return this.id;
-  }
-
-  @Override
-  public DataType<?, T> getType() {
-    return this.type;
-  }
-
-  @Override
-  public T getValue() {
-    return this.value;
-  }
+public record Data<T>(DataType<T> type, short id, T value) {
+  public static final StreamCodec<RegistryFriendlyByteBuf, Data<?>> STREAM_CODEC =
+      ByteBufCodecs.registry(DataType.REGISTRY_KEY).dispatch(Data::type, DataType::streamCodec);
 }

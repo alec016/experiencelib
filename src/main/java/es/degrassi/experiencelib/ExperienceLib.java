@@ -4,7 +4,6 @@ import com.mojang.logging.LogUtils;
 import es.degrassi.experiencelib.api.capability.ExperienceLibCapabilities;
 import es.degrassi.experiencelib.api.capability.IExperienceHandler;
 import es.degrassi.experiencelib.api.network.DataType;
-import es.degrassi.experiencelib.api.network.IData;
 import es.degrassi.experiencelib.common.ExperienceLibRegistration;
 import es.degrassi.experiencelib.common.config.ExperienceLibConfig;
 import es.degrassi.experiencelib.common.registry.DataRegistration;
@@ -57,7 +56,7 @@ public class ExperienceLib {
     }, Items.EXPERIENCE_BOTTLE, Items.GLASS_BOTTLE);
   }
 
-  public static Registry<DataType<? extends IData<?>, ?>> dataRegistrar() {
+  public static Registry<DataType<?>> dataRegistrar() {
     return DataRegistration.DATA_REGISTRY;
   }
 

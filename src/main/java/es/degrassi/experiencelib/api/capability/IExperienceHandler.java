@@ -2,9 +2,8 @@ package es.degrassi.experiencelib.api.capability;
 
 import com.google.common.primitives.Ints;
 import es.degrassi.experiencelib.api.ExperienceResource;
-import es.degrassi.experiencelib.api.network.ISyncable;
 import es.degrassi.experiencelib.api.network.ISyncableStuff;
-import es.degrassi.experiencelib.api.network.syncable.LongSyncable;
+import es.degrassi.experiencelib.api.network.SyncableList;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.common.util.ValueIOSerializable;
@@ -13,7 +12,6 @@ import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
 
 public interface IExperienceHandler extends ResourceHandler<ExperienceResource>, ValueIOSerializable, ISyncableStuff {
   String AMOUNT_KEY = "amount";
@@ -41,12 +39,12 @@ public interface IExperienceHandler extends ResourceHandler<ExperienceResource>,
   default void onExperienceChange(long prevAmount) {}
 
   @Override
-  default void getStuffToSync(Consumer<ISyncable<?, ?>> container) {
+  default void getStuffToSync(SyncableList container) {
     for (AtomicInteger index = new AtomicInteger(0); index.get() < size(); index.getAndIncrement()) {
-      container.accept(LongSyncable.create(() -> getAmountAsLong(index.get()), (value) -> setExperience(index.get(), value)));
-      container.accept(LongSyncable.create(() -> getCapacityAsLong(index.get(), getResource(index.get())), (value) -> setCapacity(index.get(), value)));
-      container.accept(LongSyncable.create(() -> getMaxInsert(index.get()), (value) -> setMaxInsert(index.get(), value)));
-      container.accept(LongSyncable.create(() -> getMaxExtract(index.get()), (value) -> setMaxExtract(index.get(), value)));
+      container.syncLong(() -> getAmountAsLong(index.get()), (value) -> setExperience(index.get(), value));
+      container.syncLong(() -> getCapacityAsLong(index.get(), getResource(index.get())), (value) -> setCapacity(index.get(), value));
+      container.syncLong(() -> getMaxInsert(index.get()), (value) -> setMaxInsert(index.get(), value));
+      container.syncLong(() -> getMaxExtract(index.get()), (value) -> setMaxExtract(index.get(), value));
     }
   }
 

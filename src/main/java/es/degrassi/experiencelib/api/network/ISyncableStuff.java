@@ -1,7 +1,6 @@
 package es.degrassi.experiencelib.api.network;
 
-import java.util.function.Consumer;
-
+@FunctionalInterface
 public interface ISyncableStuff {
-  void getStuffToSync(Consumer<ISyncable<?, ?>> container);
+  void getStuffToSync(SyncableList list);
 }

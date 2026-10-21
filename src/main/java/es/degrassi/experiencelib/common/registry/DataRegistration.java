@@ -1,34 +1,15 @@
 package es.degrassi.experiencelib.common.registry;
 
 import es.degrassi.experiencelib.ExperienceLib;
+import es.degrassi.experiencelib.api.codec.NamedCodec;
 import es.degrassi.experiencelib.api.network.DataType;
-import es.degrassi.experiencelib.api.network.EnumDataType;
-import es.degrassi.experiencelib.api.network.IData;
-import es.degrassi.experiencelib.api.network.data.BooleanData;
-import es.degrassi.experiencelib.api.network.data.ComponentData;
-import es.degrassi.experiencelib.api.network.data.DoubleData;
-import es.degrassi.experiencelib.api.network.data.EnumData;
-import es.degrassi.experiencelib.api.network.data.FloatData;
-import es.degrassi.experiencelib.api.network.data.IdentifierData;
-import es.degrassi.experiencelib.api.network.data.IntegerData;
-import es.degrassi.experiencelib.api.network.data.LongData;
-import es.degrassi.experiencelib.api.network.data.NbtData;
-import es.degrassi.experiencelib.api.network.data.StringData;
-import es.degrassi.experiencelib.api.network.syncable.BooleanSyncable;
-import es.degrassi.experiencelib.api.network.syncable.ComponentSyncable;
-import es.degrassi.experiencelib.api.network.syncable.DoubleSyncable;
-import es.degrassi.experiencelib.api.network.syncable.EnumSyncable;
-import es.degrassi.experiencelib.api.network.syncable.FloatSyncable;
-import es.degrassi.experiencelib.api.network.syncable.IdentifierSyncable;
-import es.degrassi.experiencelib.api.network.syncable.IntegerSyncable;
-import es.degrassi.experiencelib.api.network.syncable.LongSyncable;
-import es.degrassi.experiencelib.api.network.syncable.NbtSyncable;
-import es.degrassi.experiencelib.api.network.syncable.StringSyncable;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -37,38 +18,34 @@ import java.util.Locale;
 import java.util.function.Supplier;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@SuppressWarnings("rawtypes, unchecked")
 public final class DataRegistration {
-  public static final DeferredRegister<DataType<? extends IData<?>, ?>> DATAS =
-      DeferredRegister.create(DataType.REGISTRY_KEY, ExperienceLib.MODID);
-  public static final Registry<DataType<? extends IData<?>, ?>> DATA_REGISTRY = DATAS.makeRegistry(builder -> {});
+  public static final DeferredRegister<DataType<?>> DATAS = DeferredRegister.create(DataType.REGISTRY_KEY, ExperienceLib.MODID);
+  public static final Registry<DataType<?>> DATA_REGISTRY = DATAS.makeRegistry(builder -> {});
 
-  public static final Supplier<DataType<BooleanData, Boolean>> BOOLEAN_DATA = create("boolean",
-      DataType.create(Boolean.class, BooleanSyncable::create, BooleanData::new));
-  public static final Supplier<DataType<IntegerData, Integer>> INTEGER_DATA = create("integer",
-      DataType.create(Integer.class, IntegerSyncable::create, IntegerData::new));
-  public static final Supplier<DataType<DoubleData, Double>> DOUBLE_DATA = create("double",
-      DataType.create(Double.class, DoubleSyncable::create, DoubleData::new));
-  public static final Supplier<DataType<FloatData, Float>> FLOAT_DATA = create("float",
-      DataType.create(Float.class, FloatSyncable::create, FloatData::new));
-  public static final Supplier<DataType<StringData, String>> STRING_DATA = create("string",
-      DataType.create(String.class, StringSyncable::create, StringData::new));
-  public static final Supplier<DataType<LongData, Long>> LONG_DATA = create("long",
-      DataType.create(Long.class, LongSyncable::create, LongData::new));
-  public static final Supplier<DataType<NbtData, CompoundTag>> NBT_DATA = create("nbt",
-      DataType.create(CompoundTag.class, NbtSyncable::create, NbtData::new));
-  public static final Supplier<DataType<IdentifierData, Identifier>> IDENTIFIER_DATA = create("identifier",
-      DataType.create(Identifier.class, IdentifierSyncable::create, IdentifierData::new));
+  public static final Supplier<DataType<Boolean>> BOOLEAN_DATA = create("boolean",
+      DataType.create(Boolean.class, ByteBufCodecs.BOOL.cast()));
+  public static final Supplier<DataType<Integer>> INTEGER_DATA = create("integer",
+      DataType.create(Integer.class, ByteBufCodecs.INT.cast()));
+  public static final Supplier<DataType<Double>> DOUBLE_DATA = create("double",
+      DataType.create(Double.class, ByteBufCodecs.DOUBLE.cast()));
+  public static final Supplier<DataType<Float>> FLOAT_DATA = create("float",
+      DataType.create(Float.class, ByteBufCodecs.FLOAT.cast()));
+  public static final Supplier<DataType<String>> STRING_DATA = create("string",
+      DataType.create(String.class, ByteBufCodecs.STRING_UTF8.cast()));
+  public static final Supplier<DataType<Long>> LONG_DATA = create("long",
+      DataType.create(Long.class, ByteBufCodecs.LONG.cast()));
+  public static final Supplier<DataType<CompoundTag>> NBT_DATA = create("nbt",
+      DataType.create(CompoundTag.class, ByteBufCodecs.fromCodec(CompoundTag.CODEC).cast(), CompoundTag::copy));
+  public static final Supplier<DataType<Identifier>> IDENTIFIER_DATA = create("identifier",
+      DataType.create(Identifier.class, Identifier.STREAM_CODEC.cast()));
 
-  public static final Supplier<DataType<ComponentData, Component>> COMPONENT_DATA = create("component",
-      DataType.create(Component.class, ComponentSyncable::create, ComponentData::new));
-  public static final Supplier<EnumDataType<?>> ENUM_DATA = create("enum",
-      EnumDataType.createEnum(EnumSyncable::create, EnumData::readData));
+  public static final Supplier<DataType<Component>> COMPONENT_DATA = create("component",
+      DataType.create(Component.class, ComponentSerialization.STREAM_CODEC.cast(), Component::copy));
+  public static final Supplier<DataType<Enum>> ENUM_DATA = create("enum",
+      DataType.create(Enum.class, NamedCodec.enumCodec(Enum.class).streamCodec().cast()));
 
-  private static <D extends IData<T>, T> Supplier<DataType<D, T>> create(String path, DataType<D, T> type) {
-    return DATAS.register(path.toLowerCase(Locale.ENGLISH), () -> type);
-  }
-
-  private static Supplier<EnumDataType<?>> create(String path, EnumDataType<?> type) {
+  private static <T> Supplier<DataType<T>> create(String path, DataType<T> type) {
     return DATAS.register(path.toLowerCase(Locale.ENGLISH), () -> type);
   }
 
