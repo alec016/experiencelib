@@ -4,8 +4,11 @@ import es.degrassi.experiencelib.api.ExperienceStack;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -21,6 +24,19 @@ public class SyncableList {
 
   public <T> void sync(Class<T> clazz, Supplier<T> getter, Consumer<T> setter) {
     sync(DataType.createSyncable(clazz, getter, setter));
+  }
+
+  @SuppressWarnings("unchecked")
+  public <T extends Enum<T>> void syncEnum(Supplier<T> getter, Consumer<T> setter) {
+    sync((Class<T>) getter.get().getClass(), getter, setter);
+  }
+
+  public void syncIdentifier(Supplier<Identifier> getter, Consumer<Identifier> setter) {
+    sync(Identifier.class, getter, setter);
+  }
+
+  public void syncId(Supplier<Identifier> getter, Consumer<Identifier> setter) {
+    syncIdentifier(getter, setter);
   }
 
   public void syncBool(Supplier<Boolean> getter, Consumer<Boolean> setter) {
@@ -65,5 +81,13 @@ public class SyncableList {
 
   public void syncExperienceStack(Supplier<ExperienceStack> getter, Consumer<ExperienceStack> setter) {
     this.sync(ExperienceStack.class, getter, setter);
+  }
+
+  public void syncItemResource(Supplier<ItemResource> getter, Consumer<ItemResource> setter) {
+    sync(ItemResource.class, getter, setter);
+  }
+
+  public void syncFluidResource(Supplier<FluidResource> getter, Consumer<FluidResource> setter) {
+    sync(FluidResource.class, getter, setter);
   }
 }

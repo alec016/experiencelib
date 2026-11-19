@@ -78,7 +78,7 @@ public class SimpleExperienceHandler implements IExperienceHandler {
   @Override
   public long insertRecipe(int tank, long amount, TransactionContext context) {
     TransferPreconditions.checkNonNegative(amount);
-    var toInsert = Math.min(amount, this.capacity - amount);
+    var toInsert = Math.min(amount, this.capacity - this.amount);
     if (toInsert > 0) {
       this.journal.updateSnapshots(context);
       this.amount += toInsert;

@@ -1,7 +1,6 @@
 package es.degrassi.experiencelib.data.localization;
 
 import es.degrassi.experiencelib.common.ExperienceLibRegistration;
-import es.degrassi.experiencelib.common.definition.ExperienceLibText;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.world.level.block.LiquidBlock;
 
@@ -25,6 +24,5 @@ final class EnUsLangProvider extends LocalizationProvider {
     for (var item : ExperienceLibRegistration.getItems()) {
       add("item.%s.%s".formatted(item.id().getNamespace(), item.id().getPath()), item.getEnglishName());
     }
-    addEnum(ExperienceLibText.class);
   }
 }

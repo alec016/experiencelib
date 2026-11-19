@@ -1,6 +1,5 @@
 package es.degrassi.experiencelib.data.localization;
 
-import es.degrassi.experiencelib.common.definition.ExperienceLibText;
 import net.minecraft.data.DataGenerator;
 
 final class RuRuLangProvider extends LocalizationProvider {
@@ -10,10 +9,6 @@ final class RuRuLangProvider extends LocalizationProvider {
 
   @Override
   protected void generate() {
-    addEnum(ExperienceLibText.class, v -> switch (v) {
-      case experience -> "Опыт";
-      default -> v.getEnglishText();
-    });
   }
 
   @Override

@@ -28,7 +28,7 @@ import java.util.Optional;
 @Mod(ExperienceLib.MODID)
 public class ExperienceLib {
   public static final String MODID = "experiencelib";
-  private static final Logger LOGGER = LogUtils.getLogger();
+  public static final Logger LOGGER = LogUtils.getLogger();
   public static final ExperienceLibHooks hooks = new ExperienceLibHooks();
 
   public ExperienceLib(IEventBus bus, ModContainer modContainer) {

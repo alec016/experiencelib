@@ -1,6 +1,5 @@
 package es.degrassi.experiencelib.data.localization;
 
-import es.degrassi.experiencelib.common.definition.ExperienceLibText;
 import net.minecraft.data.DataGenerator;
 
 final class EsEsLangProvider extends LocalizationProvider {
@@ -15,9 +14,5 @@ final class EsEsLangProvider extends LocalizationProvider {
 
   @Override
   protected void generate() {
-    addEnum(ExperienceLibText.class, v -> switch (v) {
-      case experience -> "Experiencia";
-      default -> v.getEnglishText();
-    });
   }
 }

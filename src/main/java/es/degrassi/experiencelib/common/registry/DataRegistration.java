@@ -11,8 +11,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 
 import java.util.Locale;
 import java.util.function.Supplier;
@@ -21,7 +25,7 @@ import java.util.function.Supplier;
 @SuppressWarnings("rawtypes, unchecked")
 public final class DataRegistration {
   public static final DeferredRegister<DataType<?>> DATAS = DeferredRegister.create(DataType.REGISTRY_KEY, ExperienceLib.MODID);
-  public static final Registry<DataType<?>> DATA_REGISTRY = DATAS.makeRegistry(builder -> {});
+  public static final Registry<DataType<?>> DATA_REGISTRY = DATAS.makeRegistry(builder -> builder.sync(true));
 
   public static final Supplier<DataType<Boolean>> BOOLEAN_DATA = create("boolean",
       DataType.create(Boolean.class, ByteBufCodecs.BOOL.cast()));
@@ -42,8 +46,23 @@ public final class DataRegistration {
 
   public static final Supplier<DataType<Component>> COMPONENT_DATA = create("component",
       DataType.create(Component.class, ComponentSerialization.STREAM_CODEC.cast(), Component::copy));
-  public static final Supplier<DataType<Enum>> ENUM_DATA = create("enum",
-      DataType.create(Enum.class, NamedCodec.enumCodec(Enum.class).streamCodec().cast()));
+  public static final Supplier<DataType<Enum>> ENUM_DATA = create("enum", DataType.createEnum(Enum.class));
+
+  public static final Supplier<DataType<ItemStack>> ITEMSTACK_DATA = create("itemstack",
+      DataType.create(ItemStack.class, ItemStack.OPTIONAL_STREAM_CODEC.cast(), ItemStack::copy));
+  public static final Supplier<DataType<FluidStack>> FLUIDSTACK_DATA = create("fluidstack",
+      DataType.create(FluidStack.class, FluidStack.OPTIONAL_STREAM_CODEC.cast(), FluidStack::copy));
+  // Resources
+  public static final Supplier<DataType<FluidResource>> FLUID_RESOURCE_DATA = create("fluid_resource",
+      DataType.create(FluidResource.class, FluidResource.STREAM_CODEC.cast(), r -> FluidResource.of(
+          r.typeHolder(),
+          r.getComponentsPatch()
+      )));
+  public static final Supplier<DataType<ItemResource>> ITEM_RESOURCE_DATA = create("item_resource",
+      DataType.create(ItemResource.class, ItemResource.STREAM_CODEC.cast(), r -> ItemResource.of(
+          r.typeHolder(),
+          r.getComponentsPatch()
+      )));
 
   private static <T> Supplier<DataType<T>> create(String path, DataType<T> type) {
     return DATAS.register(path.toLowerCase(Locale.ENGLISH), () -> type);

@@ -1,6 +1,7 @@
 package es.degrassi.experiencelib.api.network;
 
 import es.degrassi.experiencelib.ExperienceLib;
+import es.degrassi.experiencelib.api.codec.NamedCodec;
 import es.degrassi.experiencelib.util.Utils;
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -35,6 +36,14 @@ public class DataType<T> {
    */
   public static <T> DataType<T> create(Class<T> type, StreamCodec<RegistryFriendlyByteBuf, T> streamCodec) {
     return new DataType<>(type, streamCodec, null, null);
+  }
+  /**
+   * A factory method to create new {@link DataType}.
+   * @param type The {@link Class} of the object to sync.
+   * @param <T> The type of the object to sync.
+   */
+  public static <T extends Enum<T>> DataType<T> createEnum(Class<T> type) {
+    return new DataType<>(type, NamedCodec.enumCodec(type).streamCodec(), null, null);
   }
 
   /**
@@ -85,7 +94,7 @@ public class DataType<T> {
    * A constructor for {@link DataType}.
    * Use {@link DataType#create(Class, StreamCodec)} instead.
    */
-  private DataType(Class<T> type, StreamCodec<RegistryFriendlyByteBuf, T> streamCodec, @Nullable BiPredicate<T, T> equalityCheck, @Nullable UnaryOperator<T> copier) {
+  protected DataType(Class<T> type, StreamCodec<RegistryFriendlyByteBuf, T> streamCodec, @Nullable BiPredicate<T, T> equalityCheck, @Nullable UnaryOperator<T> copier) {
     this.type = type;
     this.streamCodec = StreamCodec.composite(
         ByteBufCodecs.registry(Utils.cast(REGISTRY_KEY)),
@@ -141,7 +150,13 @@ public class DataType<T> {
    */
   @SuppressWarnings("unchecked")
   public static <T> Syncable<T> createSyncable(Class<T> type, Supplier<T> supplier, Consumer<T> consumer) {
-    Optional<DataType<T>> dataType = ExperienceLib.dataRegistrar().entrySet().stream().filter(entry -> entry.getValue().type == type).map(entry -> (DataType<T>)entry.getValue()).findFirst();
+    Optional<DataType<T>> dataType = ExperienceLib
+        .dataRegistrar()
+        .entrySet()
+        .stream()
+        .filter(entry -> entry.getValue().type == type)
+        .map(entry -> (DataType<T>)entry.getValue())
+        .findFirst();
     if(dataType.isPresent())
       return dataType.get().createSyncable(supplier, consumer);
     throw new IllegalArgumentException("Couldn't create Syncable for provided type: " + type.getName() + ". No registered DataType for this type.");
